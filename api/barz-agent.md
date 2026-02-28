@@ -78,6 +78,57 @@ const receipt = await agent.waitForTransaction(hash)
 // receipt.gasUsed: bigint
 ```
 
+### `swap(params)`
+Swap tokens using Uniswap V3. Automatically handles approve + swap in a single atomic UserOperation.
+
+```typescript
+const hash = await agent.swap({
+  from: 'USDC',
+  to: 'WETH',
+  amount: '100',
+})
+```
+
+**Parameters:** [`SwapParams`](./agent-config.md)
+- `from` — Input token (symbol or address)
+- `to` — Output token (symbol or address)
+- `amount` — Human-readable amount
+- `slippage?` — Max slippage percent (default: 0.5, reserved)
+- `fee?` — Uniswap pool fee tier (default: 3000)
+
+**Behavior:**
+- Validates token permissions if `allowedTokens` is configured
+- ETH input: single swap tx (router wraps to WETH)
+- ERC20 input: approve + swap (two calls, one UserOp)
+- Throws `BarzKitError` for unsupported chains, unknown tokens, or same-token swaps
+- Throws `FrozenError` if agent is frozen
+
+See [DeFi Actions guide](../guides/defi-actions.md) for examples.
+
+### `lend(params)`
+Supply tokens to a lending protocol. Currently supports Aave V3.
+
+```typescript
+const hash = await agent.lend({
+  token: 'USDC',
+  amount: '50',
+  protocol: 'aave',
+})
+```
+
+**Parameters:** [`LendParams`](./agent-config.md)
+- `token` — Token to supply (symbol or address)
+- `amount` — Human-readable amount
+- `protocol` — `'aave'` (only supported protocol)
+
+**Behavior:**
+- Always approve + supply (two calls, one UserOp)
+- Native ETH rejected — wrap to WETH first
+- Validates token permissions if configured
+- Throws `FrozenError` if agent is frozen
+
+See [DeFi Actions guide](../guides/defi-actions.md) for examples.
+
 ### `getExplorerUrl(hash)`
 Get the block explorer URL for a transaction hash on the agent's chain.
 

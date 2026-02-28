@@ -65,4 +65,4 @@ await agent.batchTransactions([
 
 Under the hood, `batchTransactions` encodes all calls into a single ERC-4337 UserOperation using the smart account's `executeBatch` function. The bundler submits it as one on-chain transaction.
 
-See [`src/core/account.ts`](../../sdk/src/core/account.ts) for implementation.
+See [`src/core/account.ts`](https://github.com/barzkit/sdk/blob/main/src/core/account.ts) for implementation.

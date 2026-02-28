@@ -14,6 +14,7 @@ Developer documentation for [@barzkit/sdk](https://github.com/barzkit/sdk).
 - [Permissions](./guides/permissions.md) — Spending limits, contract whitelists, time windows
 - [Gasless Transactions](./guides/gasless.md) — How the paymaster covers gas fees
 - [Batch Transactions](./guides/batch-transactions.md) — Atomic multi-call in a single UserOperation
+- [DeFi Actions](./guides/defi-actions.md) — Swap (Uniswap V3) and Lend (Aave V3)
 - [Safety & Kill Switch](./guides/safety.md) — Freeze/unfreeze, Guardian Facet
 - [Multi-Chain](./guides/multi-chain.md) — Sepolia, Base Sepolia, Base mainnet
 
