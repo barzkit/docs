@@ -73,4 +73,4 @@ const agent = await createBarzAgent({
 })
 ```
 
-See [`src/chains/chains.ts`](../../barzkit-sdk/src/chains/chains.ts) for default RPC URLs.
+See [`src/chains/chains.ts`](../../sdk/src/chains/chains.ts) for default RPC URLs.
