@@ -1,0 +1,46 @@
+# BarzKit SDK
+
+> BarzKit is a TypeScript SDK for creating self-custody smart account wallets for AI agents. It wraps Trust Wallet's Barz contracts (ERC-4337, Diamond Proxy EIP-2535) and provides gasless transactions, spending limits, contract whitelists, and a kill switch. Install with `npm install @barzkit/sdk viem`. Requires a Pimlico API key (free at pimlico.io).
+
+Key things to know:
+- `createBarzAgent(config)` creates an agent wallet. Returns a `BarzAgent` object with `address`, `sendTransaction()`, `batchTransactions()`, `getBalance()`, `waitForTransaction()`, `getExplorerUrl()`, `getPermissions()`, `updatePermissions()`, `freeze()`, `unfreeze()`, `isActive()`.
+- Gasless by default — paymaster covers gas, agent wallet needs no ETH.
+- Permissions (`maxAmountPerTx`, `maxDailySpend`, `allowedTokens`, `allowedContracts`, `timeWindow`) are enforced client-side. Violations throw `PermissionError`.
+- Uses `permissionless.js` from Pimlico under the hood. Import `toTrustSmartAccount` always requires `entryPoint: { address: entryPoint06Address, version: '0.6' }`.
+- Chains: `'sepolia'`, `'base-sepolia'`, `'base'`.
+
+## Docs
+
+- [Quickstart](https://github.com/barzkit/docs/blob/main/getting-started/quickstart.md): Create agent wallet and send first transaction in 5 minutes
+- [Installation](https://github.com/barzkit/docs/blob/main/getting-started/installation.md): Prerequisites, npm install, Pimlico API key setup
+- [Concepts](https://github.com/barzkit/docs/blob/main/getting-started/concepts.md): ERC-4337, Diamond Proxy, passkeys explained for non-blockchain developers
+- [BarzAgent API](https://github.com/barzkit/docs/blob/main/api/barz-agent.md): Full interface reference — all methods, params, return types
+- [Batch Transactions guide](https://github.com/barzkit/docs/blob/main/guides/batch-transactions.md): Atomic multi-call in a single UserOperation
+- [Multi-Chain guide](https://github.com/barzkit/docs/blob/main/guides/multi-chain.md): Sepolia, Base Sepolia, Base — explorer URLs, mainnet warning
+
+## Code
+
+- [SDK source](https://github.com/barzkit/sdk/blob/main/src/index.ts): Public API exports
+- [Account creation](https://github.com/barzkit/sdk/blob/main/src/core/account.ts): `createBarzAgent()` implementation
+- [Types](https://github.com/barzkit/sdk/blob/main/src/core/types.ts): `AgentConfig`, `BarzAgent`, `AgentPermissions`, `TransactionRequest` interfaces
+- [Permissions](https://github.com/barzkit/sdk/blob/main/src/permissions/permissions.ts): `PermissionManager` validation logic
+- [Guardian](https://github.com/barzkit/sdk/blob/main/src/safety/guardian.ts): Freeze/unfreeze kill switch
+- [Client factory](https://github.com/barzkit/sdk/blob/main/src/core/client.ts): viem + Pimlico client setup
+- [Errors](https://github.com/barzkit/sdk/blob/main/src/utils/errors.ts): Error classes and AA error code mapping
+- [Constants](https://github.com/barzkit/sdk/blob/main/src/utils/constants.ts): Token addresses, ERC20 ABI
+- [Chain configs](https://github.com/barzkit/sdk/blob/main/src/chains/chains.ts): Sepolia, Base Sepolia, Base
+
+## Examples
+
+- [Simple agent](https://github.com/barzkit/examples/blob/main/simple-agent/index.ts): Minimal wallet creation and transaction
+- [Batch transactions](https://github.com/barzkit/examples/blob/main/batch-transactions/index.ts): Atomic multi-call in a single UserOperation
+- [Multi-chain](https://github.com/barzkit/examples/blob/main/multi-chain/index.ts): Deploy on multiple chains, getExplorerUrl demo
+- [Gasless agent](https://github.com/barzkit/examples/blob/main/gasless-agent/index.ts): Permissions, freeze/unfreeze, gasless demo
+- [Live test script](https://github.com/barzkit/sdk/blob/main/scripts/test-barz.ts): End-to-end Sepolia + Base Sepolia test
+
+## Optional
+
+- [Barz contracts](https://github.com/trustwallet/barz): Trust Wallet's smart contract source (Diamond Proxy, all facets)
+- [Pimlico permissionless.js](https://docs.pimlico.io/permissionless): Underlying ERC-4337 library docs
+- [Trust Wallet Barz guide](https://docs.pimlico.io/guides/how-to/accounts/use-trustwallet-account): Pimlico's integration guide for Barz accounts
+- [ERC-4337 overview](https://docs.pimlico.io/conceptual/account-abstraction): Account Abstraction explained
